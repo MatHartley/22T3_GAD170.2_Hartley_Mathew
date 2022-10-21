@@ -38,7 +38,7 @@ namespace MathewHartley
             int firstGen = Random.Range(1, 25);
             int lastGen = Random.Range(1, 15);
             int hobbyGen = Random.Range(1, 10);
-            float paraGen = Random.Range(-1, 1);
+            int paraGen = Random.Range(-2, 2);
 
             crewFirstName = firstNames[firstGen];
             crewLastName = lastNames[lastGen];
@@ -60,7 +60,9 @@ namespace MathewHartley
             Debug.Log("Crewmate: " + crewFirstName + " " + crewLastName + ". Likes: " + crewHobby + 
                 ". Parasite: " + isParasite);
         }
-
+        /// <summary>
+        /// used for testing the Generate method before the Ship clas was implemented
+        /// </summary>
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
