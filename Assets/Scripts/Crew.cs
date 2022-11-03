@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MathewHartley
 {
 
-    public class CrewGenerator : MonoBehaviour
+    public class Crew : MonoBehaviour
     {
         //These string arrays are the name and hobby selection lists
         private string[] firstNames = new string[25] {"Maria", "Mohammed", "Jose", "Wei", "Ali", 
