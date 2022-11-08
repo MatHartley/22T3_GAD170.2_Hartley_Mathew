@@ -1,3 +1,4 @@
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,9 +16,18 @@ namespace MathewHartley
         /// initializes the UI elements of the game
         /// </summary>
         void Start()
-        { 
+        {
             //initialize UI buttons
         }
+
+        void OfferCrew()
+        {
+            offerCrewmate = true;
+            SwapButtons();
+            offerCrewmate = false;
+            
+        }
+
 
         /// <summary>
         /// the game controller logic and process. 

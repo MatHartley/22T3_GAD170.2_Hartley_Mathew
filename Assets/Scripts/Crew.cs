@@ -31,7 +31,7 @@ namespace MathewHartley
         /// Generates a crewmate using randomly selected names and hobbies from the arrays
         /// Sets the parasite condition and selects hobby accordingly
         /// </summary>
-        void Generate()
+        public void Generate()
         {
             //generates random numbers for name and hobby selection
             //generates random number for parasite condition

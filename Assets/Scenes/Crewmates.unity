@@ -1627,6 +1627,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85239b0c769e2d9419a4984a03e28ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipRoster: []
+  crewGen: {fileID: 1756300175139314113, guid: 20affdfdb35364d428975a0ed2c59604, type: 3}
 --- !u!1 &2024165548
 GameObject:
   m_ObjectHideFlags: 0
