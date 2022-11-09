@@ -20,7 +20,7 @@ namespace MathewHartley
             "Watching Documentaries", "Gaming", "Watching Youtube"};
         private string[] paraHobbies = new string[10] { "Bonecarving", "Survivalism",
             "People Watching", "Puppetry", "Dining on Friends", "Taxidermy", "Microbiology",
-            "Watching True Crime", "Wargaming", "Watching TicTok"};
+            "Watching True Crime", "Wargaming", "Watching TikTok"};
 
         [SerializeField] public string firstName;
         [SerializeField] public string lastName;
