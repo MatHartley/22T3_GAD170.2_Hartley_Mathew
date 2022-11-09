@@ -2,32 +2,61 @@ using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 namespace MathewHartley
 {
     public class Ship : MonoBehaviour
     {
         [SerializeField] private List<Crew> shipRoster;
-        [SerializeField] private Crew crewGen;
+        [SerializeField] private Crew crewGenPrefab;
+        [SerializeField] private Crew newCrew;
+        [SerializeField] private bool offerCrewmate;
+        [SerializeField] private int deathCount;
 
-        private bool offerCrewmate;
+        public GameObject canvas;
+        public GameObject genButton;
+        public GameObject addButton;
+        public GameObject decButton;
+        public GameObject replayButton;
+        public GameObject quitButton;
+        public TextMeshProUGUI gameText;
+        public TextMeshProUGUI shipCountText;
+        public TextMeshProUGUI deathCountText;
+
 
         /// <summary>
-        /// initializes the UI elements of the game
+        /// generates a crewmate and offers it for the player to accept or decline
+        /// kills existing crewmate if added crewmate is a parasite
         /// </summary>
-        void Start()
+        public void OfferCrew()
         {
-            //initialize UI buttons
-        }
-
-        void OfferCrew()
-        {
+            Debug.Log("Generate Crew clicked");
             offerCrewmate = true;
             SwapButtons();
             offerCrewmate = false;
-            
+
+            //generate a new crewmate
+            newCrew = Instantiate(crewGenPrefab, transform);
+            newCrew.Generate();
+            newCrew.name = newCrew.firstName + " " + newCrew.lastName;
+
+            gameText.SetText("Crewmate: " + newCrew.firstName + " " + newCrew.lastName + " Hobby: " + newCrew.hobby);
         }
 
+        /// <summary>
+        /// sets the game initial gamestate for buttons
+        /// </summary>
+        private void Start()
+        {
+            genButton.SetActive(true);
+            addButton.SetActive(false);
+            decButton.SetActive(false);
+            replayButton.SetActive(false);
+            quitButton.SetActive(true);
+            offerCrewmate = false;
+        }
 
         /// <summary>
         /// the game controller logic and process. 
@@ -36,38 +65,13 @@ namespace MathewHartley
         /// </summary>
         void Update()
         {
-            //if generate crew button is pressed
-            //{
-            //offerCrewmate = true;
-            //SwapButtons();
-            //offerCrewmate = false;
-
-            //Crew newCrew = Instantiate(crewGen, transform);
-            //newCrew.crewFirstName = 
-            //newCrew.crewLastName = 
-            //newCrew.crewHobby = 
-            //newCrew.isParasite =
-
-            //newCrew.name = crewFirstName + " " + crewLastName;
-
-            //display "Crewmate: " + newCrew.name + "Hobby: " + newCrew.crewHobby"
-            //}
-
-            //if accept crew button is pressed
-            //{
-            //wait 2 seconds
-            //AddCrew();
-            //SwapButtons();
-            //}
-
-            //if decline crew button is pressed
-            //{
-            //wait 2 seconds
-            //display "newCrew.name + "'s application has been declined.""
-            //SwapButtons();
-            //}
-
+            shipCountText.SetText(shipRoster.Count.ToString());
+            deathCountText.SetText(deathCount.ToString());
             if (shipRoster.Count == 10)
+            {
+                GameEnd();
+            }
+            else if (deathCount == 3)
             {
                 GameEnd();
             }
@@ -78,39 +82,71 @@ namespace MathewHartley
         /// </summary>
         void SwapButtons()
         {
+            //swaps button status to allow player to accept or deny a generated crewmate
             if (offerCrewmate == true)
             {
-                //deactivate generate crewmate button
-                //activate accept crewmate button
-                //activate decline crewmate button
+                genButton.SetActive(false);
+                addButton.SetActive(true);
+                decButton.SetActive(true);
             }
-            else
-            { 
-                //activate generate crewmate button
-                //deactivate accept crewmate button
-                //deactive decline crewmate button
+            //swaps button status to allow a new crewmate to be generated
+            else if (offerCrewmate == false)
+            {
+                genButton.SetActive(true);
+                addButton.SetActive(false);
+                decButton.SetActive(false);
             }
         }
 
         /// <summary>
         /// populates and depopulates the ship roster.
+        /// checks if the generated crewmate is a parasite
+        ///if true, the generated crewmate is not added to the shipRoster list, and an existing crewmate is killed
         /// </summary>
-        void AddCrew()
+        public void AddCrew()
         {
-            //if (newCrew.isParasite == true)
-                //{
-                //play blood splatter sound effect
-                //int killGen= Random.Range(1, shipRoster.Count)
-                //display "newCrew.name + " was a parasite.""
-                //display "shipRoster[killGen].crewFirstName + " " +
-                //shipRoster[killGen].crewFirstName + " has been found dead.""
-                //shipRoster[killGen].Remove;
-                //}
-            //else
-                //{
-                //shipRoster.Add(newCrew);
-                //display "newCrew.name + " has joined the crew.""
-                //}
+            Debug.Log("Add Crew clicked");
+            
+            if (newCrew.isParasite == true)
+            {
+                gameText.SetText(newCrew.firstName + " " + newCrew.lastName + " was a parasite!");
+                StartCoroutine(Co_KillCrew());
+            }
+            else
+            {
+                shipRoster.Add(newCrew);
+                gameText.SetText(newCrew.firstName + " " + newCrew.lastName + " has been added to the crew.");
+
+                SwapButtons();
+            }
+        }
+
+        private IEnumerator Co_KillCrew()
+        {
+            yield return new WaitForSeconds(2);
+            //play blood splatter sound effect
+
+            //randomly selects an existing crewmate from the shipRoster list
+            int killGen = Random.Range(0, shipRoster.Count);
+            gameText.SetText(shipRoster[killGen].firstName + " " + shipRoster[killGen].lastName
+                        + " has been killed!");
+            shipRoster.RemoveAt(killGen);
+            SwapButtons();
+        }
+
+        /// <summary>
+        /// displays crew declined message
+        /// </summary>
+        public void DeclineCrew()
+        {
+            Debug.Log("Decline Crew clicked");
+
+            if (newCrew.isParasite == false)
+            {
+                deathCount++;
+            }
+            gameText.SetText(newCrew.firstName + " " + newCrew.lastName + "'s application has been denied.");
+            SwapButtons();
         }
 
         /// <summary>
@@ -118,11 +154,30 @@ namespace MathewHartley
         /// </summary>
         void GameEnd()
         {
+            genButton.SetActive(false);
+            addButton.SetActive(false);
+            decButton.SetActive(false);
+            replayButton.SetActive(true);
+            quitButton.SetActive(true);
+
             if (shipRoster.Count == 10)
             {
-                //display “Congratulations, your ship has a full crew.”
+                gameText.SetText("Congratulations, your ship has a full crew!");
             }
-            //activate replay button
+            else if (deathCount == 3)
+            {
+                gameText.SetText("You have killed too many innocents. You lose.");
+            }
+        }
+        public void Replay()
+        {
+            Debug.Log("Replay clicked");
+            SceneManager.LoadScene("Crewmates");
+        }
+        public void Exit()
+        {
+            Debug.Log("Quit Game clicked");
+            Application.Quit();
         }
     }
 }
