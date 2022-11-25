@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace MathewHartley
 {
-
     public class Crew : MonoBehaviour
     {
         //These string arrays are the name and hobby selection lists
@@ -15,12 +14,12 @@ namespace MathewHartley
         private string[] lastNames = new string[15] {"Wang", "Smith", "Devi", "Ivanov", "Kim",
             "Ali", "Garcia", "Muller", "Silva","Mohamed", "Nguyen", "Rodriguez", "Moyo",
             "Hansen", "Tesfaye"};
-        private string[] crewHobbies = new string[10] { "Woodcarving", "Bushwalking",
-            "Train Spotting", "Dancing", "Dining with Friends", "Pet Grooming", "Physics",
-            "Watching Documentaries", "Gaming", "Watching Youtube"};
-        private string[] paraHobbies = new string[10] { "Bonecarving", "Survivalism",
+        private string[] crewHobbies = new string[10] { "Woodcarving", "Camping Out",
+            "Train Spotting", "Dancing", "Dining with Friends", "Pet Grooming", "Mathematics",
+            "Watching Documentaries", "Gaming", "Midnight Walks"};
+        private string[] paraHobbies = new string[10] { "Bonecarving", "Camping In",
             "People Watching", "Puppetry", "Dining on Friends", "Taxidermy", "Microbiology",
-            "Watching True Crime", "Wargaming", "Watching TikTok"};
+            "Watching True Crime", "Fighting", "Midnight Hunts"};
 
         [SerializeField] public string firstName;
         [SerializeField] public string lastName;
